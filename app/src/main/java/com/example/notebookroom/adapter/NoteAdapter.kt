@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.notebookroom.APP
 import com.example.notebookroom.R
 import com.example.notebookroom.model.NoteModel
+import com.example.notebookroom.screens.start.StartFragment
 
 class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
@@ -22,6 +25,9 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         holder.itemView.findViewById<TextView>(R.id.item_title).text = listNote[position].title
+        holder.itemView.setOnClickListener {
+            Toast.makeText(APP, "$position", Toast.LENGTH_SHORT).show()
+        }
 
     }
 
@@ -30,9 +36,20 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setList(list: List<NoteModel>){
+    fun setList(list: List<NoteModel>) {
         listNote = list
         notifyDataSetChanged()
+    }
+
+    override fun onViewAttachedToWindow(holder: NoteViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        holder.itemView.setOnClickListener {
+            StartFragment.clickNote(listNote[holder.adapterPosition])
+        }
+    }
+
+    override fun onViewDetachedFromWindow(holder: NoteViewHolder) {
+        holder.itemView.setOnClickListener(null)
     }
 
 }

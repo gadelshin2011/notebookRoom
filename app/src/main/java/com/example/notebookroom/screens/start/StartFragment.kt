@@ -11,6 +11,7 @@ import com.example.notebookroom.APP
 import com.example.notebookroom.R
 import com.example.notebookroom.adapter.NoteAdapter
 import com.example.notebookroom.databinding.FragmentStartBinding
+import com.example.notebookroom.model.NoteModel
 
 
 class StartFragment : Fragment() {
@@ -41,11 +42,19 @@ class StartFragment : Fragment() {
         adapter = NoteAdapter()
         recyclerView.adapter = adapter
         viewModel.getAllNotes().observe(viewLifecycleOwner) { listNote ->
-            listNote.asReversed()
-            adapter.setList(listNote)
+            adapter.setList(listNote.asReversed())
         }
         binding.btnNext.setOnClickListener {
             APP.navController.navigate(R.id.action_startFragment_to_addNoteFragment)
+        }
+    }
+
+    companion object{
+        fun clickNote(noteModel: NoteModel){
+            val bundle = Bundle()
+            bundle.putSerializable("note", noteModel)
+
+            APP.navController.navigate(R.id.action_startFragment_to_detailFragment3, bundle)
         }
     }
 
